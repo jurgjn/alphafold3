@@ -25,7 +25,7 @@ dependencies = [
     "jaxtyping==0.2.34",
     "numpy",
     "rdkit==2024.3.5",
-    "triton==3.1.0",
+    "triton @ git+https://github.com/triton-lang/triton@v3.1.0#egg=triton&subdirectory=python",
     "tqdm",
     "typeguard==2.13.3",
     "zstandard",
