@@ -81,6 +81,14 @@ ARG UV_EXTRAS=""
 RUN --mount=type=cache,target=/root/.cache/uv \
     UV_LINK_MODE=copy uv sync --frozen --all-groups --no-editable $UV_EXTRAS
 
+# components.cif is no longer shipped in the wheel (upstream commit 5ef5f9e);
+# fetch the same pinned CCD snapshot as CI. LIBCIFPP_DATA_DIR stays set at
+# runtime because DSSP (predicted_disorder) also reads it.
+ENV LIBCIFPP_DATA_DIR=/app/libcifpp
+RUN mkdir -p $LIBCIFPP_DATA_DIR && \
+    wget -qO- https://pdbsnapshots.s3.us-west-2.amazonaws.com/20260101/pub/pdb/data/monomers/components.cif.gz \
+    | gunzip > $LIBCIFPP_DATA_DIR/components.cif
+
 # Build chemical components database (this binary was installed by uv sync).
 RUN uv run build_data
 
